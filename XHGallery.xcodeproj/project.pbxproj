@@ -14,6 +14,9 @@
 		826F415D1A4B1C3100659F04 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 826F415C1A4B1C3100659F04 /* Images.xcassets */; };
 		826F41601A4B1C3100659F04 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 826F415E1A4B1C3100659F04 /* LaunchScreen.xib */; };
 		826F416C1A4B1C3100659F04 /* XHGalleryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 826F416B1A4B1C3100659F04 /* XHGalleryTests.m */; };
+		826F417B1A4B378F00659F04 /* ebZoomingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 826F41761A4B378F00659F04 /* ebZoomingScrollView.m */; };
+		826F417C1A4B378F00659F04 /* embDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 826F41781A4B378F00659F04 /* embDataViewController.m */; };
+		826F417D1A4B378F00659F04 /* embModelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 826F417A1A4B378F00659F04 /* embModelController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +43,12 @@
 		826F41651A4B1C3100659F04 /* XHGalleryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XHGalleryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		826F416A1A4B1C3100659F04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		826F416B1A4B1C3100659F04 /* XHGalleryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHGalleryTests.m; sourceTree = "<group>"; };
+		826F41751A4B378F00659F04 /* ebZoomingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ebZoomingScrollView.h; sourceTree = "<group>"; };
+		826F41761A4B378F00659F04 /* ebZoomingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ebZoomingScrollView.m; sourceTree = "<group>"; };
+		826F41771A4B378F00659F04 /* embDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = embDataViewController.h; sourceTree = "<group>"; };
+		826F41781A4B378F00659F04 /* embDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = embDataViewController.m; sourceTree = "<group>"; };
+		826F41791A4B378F00659F04 /* embModelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = embModelController.h; sourceTree = "<group>"; };
+		826F417A1A4B378F00659F04 /* embModelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = embModelController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +94,12 @@
 				826F41541A4B1C3100659F04 /* AppDelegate.m */,
 				826F41561A4B1C3100659F04 /* ViewController.h */,
 				826F41571A4B1C3100659F04 /* ViewController.m */,
+				826F41751A4B378F00659F04 /* ebZoomingScrollView.h */,
+				826F41761A4B378F00659F04 /* ebZoomingScrollView.m */,
+				826F41771A4B378F00659F04 /* embDataViewController.h */,
+				826F41781A4B378F00659F04 /* embDataViewController.m */,
+				826F41791A4B378F00659F04 /* embModelController.h */,
+				826F417A1A4B378F00659F04 /* embModelController.m */,
 				826F41591A4B1C3100659F04 /* Main.storyboard */,
 				826F415C1A4B1C3100659F04 /* Images.xcassets */,
 				826F415E1A4B1C3100659F04 /* LaunchScreen.xib */,
@@ -219,6 +234,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				826F417B1A4B378F00659F04 /* ebZoomingScrollView.m in Sources */,
+				826F417C1A4B378F00659F04 /* embDataViewController.m in Sources */,
+				826F417D1A4B378F00659F04 /* embModelController.m in Sources */,
 				826F41581A4B1C3100659F04 /* ViewController.m in Sources */,
 				826F41551A4B1C3100659F04 /* AppDelegate.m in Sources */,
 				826F41521A4B1C3100659F04 /* main.m in Sources */,
