@@ -17,6 +17,7 @@
 		826F417B1A4B378F00659F04 /* ebZoomingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 826F41761A4B378F00659F04 /* ebZoomingScrollView.m */; };
 		826F417C1A4B378F00659F04 /* embDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 826F41781A4B378F00659F04 /* embDataViewController.m */; };
 		826F417D1A4B378F00659F04 /* embModelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 826F417A1A4B378F00659F04 /* embModelController.m */; };
+		826F41801A4B48DA00659F04 /* XHGalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 826F417F1A4B48DA00659F04 /* XHGalleryViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,8 @@
 		826F41781A4B378F00659F04 /* embDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = embDataViewController.m; sourceTree = "<group>"; };
 		826F41791A4B378F00659F04 /* embModelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = embModelController.h; sourceTree = "<group>"; };
 		826F417A1A4B378F00659F04 /* embModelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = embModelController.m; sourceTree = "<group>"; };
+		826F417E1A4B48DA00659F04 /* XHGalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XHGalleryViewController.h; sourceTree = "<group>"; };
+		826F417F1A4B48DA00659F04 /* XHGalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHGalleryViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +97,8 @@
 				826F41541A4B1C3100659F04 /* AppDelegate.m */,
 				826F41561A4B1C3100659F04 /* ViewController.h */,
 				826F41571A4B1C3100659F04 /* ViewController.m */,
+				826F417E1A4B48DA00659F04 /* XHGalleryViewController.h */,
+				826F417F1A4B48DA00659F04 /* XHGalleryViewController.m */,
 				826F41751A4B378F00659F04 /* ebZoomingScrollView.h */,
 				826F41761A4B378F00659F04 /* ebZoomingScrollView.m */,
 				826F41771A4B378F00659F04 /* embDataViewController.h */,
@@ -234,6 +239,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				826F41801A4B48DA00659F04 /* XHGalleryViewController.m in Sources */,
 				826F417B1A4B378F00659F04 /* ebZoomingScrollView.m in Sources */,
 				826F417C1A4B378F00659F04 /* embDataViewController.m in Sources */,
 				826F417D1A4B378F00659F04 /* embModelController.m in Sources */,

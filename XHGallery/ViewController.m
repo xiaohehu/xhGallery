@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "XHGalleryViewController.h"
 
 @interface ViewController ()
 
@@ -17,6 +18,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (IBAction)tapButton:(id)sender {
+    NSLog(@"Should load gallery");
+    XHGalleryViewController *gallery = [[XHGalleryViewController alloc] init];
+    [self.view addSubview: gallery.view];
 }
 
 - (void)didReceiveMemoryWarning {
