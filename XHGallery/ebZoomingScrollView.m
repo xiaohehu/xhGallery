@@ -44,7 +44,7 @@
 			_blurView.image = thisImage;
 			[self zoomableScrollview:self withImage:_blurView];
 //            [_blurView setContentMode:UIViewContentModeTop];
-            _blurView.contentMode = UIViewContentModeCenter;
+            _blurView.contentMode = UIViewContentModeScaleAspectFit;
             
 			if (zoomable==1) {
 				[self unlockZoom];

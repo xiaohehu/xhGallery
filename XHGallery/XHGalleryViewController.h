@@ -7,7 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+@class XHGalleryViewController;
+@protocol XHGalleryDelegate
+
+- (void)didRemoveFromSuperView;
+
+@end
+
 
 @interface XHGalleryViewController : UIViewController
+
+@property (nonatomic, strong) id            delegate;
 
 @end

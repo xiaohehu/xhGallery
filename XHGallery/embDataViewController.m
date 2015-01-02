@@ -16,7 +16,6 @@
 }
 
 @property (nonatomic, strong) ebZoomingScrollView			*zoomingScroll;
-@property (nonatomic, strong) NSDictionary					*dict;
 @property (nonatomic, strong) UIView						*uiv_PlanDataContainer;
 @property (nonatomic, strong) UIImage						*uii_PlanData;
 @property (nonatomic, strong) UIImageView					*uiiv_PlanData;
@@ -30,7 +29,6 @@
     [super viewDidLoad];
     self.view.frame = [[UIScreen mainScreen] bounds];
 	// Do any additional setup after loading the view, typically from a nib.
-	_dict = self.dataObject;
     self.view.backgroundColor = [UIColor whiteColor];
     [self loadDataAndView];
 }
@@ -40,10 +38,10 @@
 {
     if (!_zoomingScroll) {
         CGRect theFrame = self.view.bounds;
-        theFrame.origin.x = 35;
-        theFrame.origin.y = 64;
-        theFrame.size.width = 900;
-        theFrame.size.height = 682;
+//        theFrame.origin.x = 35;
+//        theFrame.origin.y = 64;
+//        theFrame.size.width = 900;
+//        theFrame.size.height = 682;
         _zoomingScroll = [[ebZoomingScrollView alloc] initWithFrame:theFrame image:nil shouldZoom:YES];
         [self.view addSubview:_zoomingScroll];
         _zoomingScroll.backgroundColor = [UIColor clearColor];
@@ -51,7 +49,7 @@
     }
     
     // plan info data
-    NSString *planName = _dict[@"floorplaninfo"][0][@"floorinfo"][0];
+    NSString *planName = self.dataObject;
     [self loadInImge:planName];
 }
 

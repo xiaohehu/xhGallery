@@ -9,11 +9,18 @@
 #import "ViewController.h"
 #import "XHGalleryViewController.h"
 
-@interface ViewController ()
+@interface ViewController () <XHGalleryDelegate>
+
+@property (nonatomic, strong)   XHGalleryViewController *gallery;
 
 @end
 
 @implementation ViewController
+
+- (BOOL)prefersStatusBarHidden
+{
+    return  YES;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -21,9 +28,22 @@
 }
 
 - (IBAction)tapButton:(id)sender {
-    NSLog(@"Should load gallery");
-    XHGalleryViewController *gallery = [[XHGalleryViewController alloc] init];
-    [self.view addSubview: gallery.view];
+
+    _gallery = [[XHGalleryViewController alloc] init];
+    _gallery.delegate = self;
+    [self addChildViewController:_gallery];
+    [self.view addSubview: _gallery.view];
+}
+
+- (void)didRemoveFromSuperView
+{
+    [UIView animateWithDuration:0.33
+                     animations:^{
+                         _gallery.view.alpha = 0.0;
+                     } completion:^(BOOL finshed){
+                         [_gallery.view removeFromSuperview];
+                         [_gallery removeFromParentViewController];
+                     }];
 }
 
 - (void)didReceiveMemoryWarning {

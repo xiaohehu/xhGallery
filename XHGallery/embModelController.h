@@ -12,6 +12,7 @@
 
 @interface embModelController : NSObject <UIPageViewControllerDataSource>
 
+- (id)initWithImage:(NSArray *)imageArray;
 - (embDataViewController *)viewControllerAtIndex:(NSUInteger)index storyboard:(UIStoryboard *)storyboard;
 - (NSUInteger)indexOfViewController:(embDataViewController *)viewController;
 

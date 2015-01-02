@@ -24,12 +24,13 @@
 
 @implementation embModelController
 
-- (id)init
+- (id)initWithImage:(NSArray *)imageArray
 {
     self = [super init];
     if (self) {
 		// Create the data model.
-		_pageData = [[NSArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"floorplanData" ofType:@"plist"]] copy];
+//		_pageData = [[NSArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"photoData" ofType:@"plist"]] copy];
+        _pageData = [[NSArray arrayWithArray:imageArray] copy];
     }
     return self;
 }
@@ -64,7 +65,7 @@
     }
     
     index--;
-    return [self viewControllerAtIndex:index storyboard:viewController.storyboard];
+    return [self viewControllerAtIndex:index storyboard:[UIStoryboard storyboardWithName:@"Main" bundle:nil]];
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
@@ -78,7 +79,7 @@
     if (index == [self.pageData count]) {
         return nil;
     }
-    return [self viewControllerAtIndex:index storyboard:viewController.storyboard];
+    return [self viewControllerAtIndex:index storyboard:[UIStoryboard storyboardWithName:@"Main" bundle:nil]];
 }
 
 @end
