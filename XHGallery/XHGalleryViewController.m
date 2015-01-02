@@ -10,11 +10,16 @@
 #import "embModelController.h"
 @interface XHGalleryViewController ()<UIPageViewControllerDelegate>
 
-// Page View
-@property (nonatomic, readwrite)        NSInteger               currentPage;
+//Top View
 @property (nonatomic, strong)           UIView                  *uiv_topView;
 @property (nonatomic, strong)           UILabel                 *uil_numLabel;
 @property (nonatomic, strong)           UIButton                *uib_back;
+
+// Bottom View
+@property (nonatomic, strong)           UIView                  *uiv_bottomView;
+@property (nonatomic, strong)           UILabel                 *uil_caption;
+// Page View
+@property (nonatomic, readwrite)        NSInteger               currentPage;
 @property (readonly, strong, nonatomic) embModelController		*modelController;
 @property (readonly, strong, nonatomic) NSArray					*arr_pageData;
 @property (strong, nonatomic)           UIPageViewController	*pageViewController;
@@ -41,11 +46,47 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [self createTopView];
+    [self createBottomView];
+    [self addGestureToView];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+}
+
+#pragma mark - Set Tap Gesture
+- (void)addGestureToView
+{
+    UITapGestureRecognizer *tapOnView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnView:)];
+    tapOnView.numberOfTapsRequired = 1;
+    tapOnView.numberOfTouchesRequired = 1;
+    [self.view addGestureRecognizer: tapOnView];
+    self.view.userInteractionEnabled = YES;
+}
+
+- (void)tapOnView:(UIGestureRecognizer *)gesture
+{
+    if (!_uiv_topView.hidden) {
+        [UIView animateWithDuration:0.33
+                         animations:^{
+                             _uiv_topView.alpha = 0.0;
+                             _uiv_bottomView.alpha = 0.0;
+                         }
+                         completion:^(BOOL finished){
+                             _uiv_topView.hidden = YES;
+                             _uiv_bottomView.hidden = YES;
+                         }];
+    }
+    else {
+        _uiv_topView.hidden = NO;
+        _uiv_bottomView.hidden = NO;
+        [UIView animateWithDuration:0.33
+                         animations:^{
+                             _uiv_topView.alpha = 1.0;
+                             _uiv_bottomView.alpha = 1.0;
+                         }];
+    }
 }
 
 #pragma mark - Set Up top view
@@ -74,6 +115,21 @@
 - (void)tapBackButton:(id)sender
 {
     [self.delegate didRemoveFromSuperView];
+}
+
+#pragma mark - Set up bottom View
+-(void)createBottomView
+{
+    _uiv_bottomView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 768-45, 1024, 45)];
+    _uiv_bottomView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.7];
+    [self.view addSubview: _uiv_bottomView];
+    
+    _uil_caption = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 0.0, 200.0, 45.0)];
+    _uil_caption.backgroundColor = [UIColor clearColor];
+    [_uil_caption setText:@"Caption"];
+    [_uil_caption setTextColor: [UIColor blackColor]];
+    _uil_caption.font = [UIFont systemFontOfSize:13.0];
+    [_uiv_bottomView addSubview: _uil_caption];
 }
 
 #pragma mark - Set up page view
