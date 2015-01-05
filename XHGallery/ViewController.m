@@ -34,6 +34,17 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [self createGallery];
+}
+//----------------------------------------------------
+#pragma mark - Gallery View
+//----------------------------------------------------
+/*
+ *To make sure the frame correct under iOS7,
+ *Call thre createGallery method in ViewDidAppear:
+ */
+- (void)createGallery
+{
     _gallery = [[XHGalleryViewController alloc] init];
     _gallery.delegate = self;
     NSString *url = [[NSBundle mainBundle] pathForResource:@"photoData" ofType:@"plist"];
@@ -55,12 +66,8 @@
 //    _gallery.showNavBar = NO;
 //    _gallery.showCaption = NO;
 }
-//----------------------------------------------------
-#pragma mark - Gallery View
-//----------------------------------------------------
+
 - (IBAction)tapButton:(id)sender {
-
-
     [self addChildViewController:_gallery];
     [self.view addSubview: _gallery.view];
 }
