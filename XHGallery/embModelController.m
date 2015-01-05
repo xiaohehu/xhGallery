@@ -20,6 +20,7 @@
 
 @interface embModelController()
 @property (readonly, strong, nonatomic) NSArray *pageData;
+@property (nonatomic, readwrite)        CGRect  dataFrame;
 @end
 
 @implementation embModelController
@@ -35,7 +36,7 @@
     return self;
 }
 
-- (embDataViewController *)viewControllerAtIndex:(NSUInteger)index storyboard:(UIStoryboard *)storyboard
+- (embDataViewController *)viewControllerAtIndex:(NSUInteger)index storyboard:(UIStoryboard *)storyboard andFrame:(CGRect)frame
 {   
     // Return the data view controller for the given index.
     if (([self.pageData count] == 0) || (index >= [self.pageData count])) {
@@ -45,6 +46,8 @@
     // Create a new view controller and pass suitable data.
     embDataViewController *dataViewController = [storyboard instantiateViewControllerWithIdentifier:@"embDataViewController"];
     dataViewController.dataObject = self.pageData[index];
+    dataViewController.view.frame = frame;
+    _dataFrame = frame;
     return dataViewController;
 }
 
@@ -65,7 +68,7 @@
     }
     
     index--;
-    return [self viewControllerAtIndex:index storyboard:[UIStoryboard storyboardWithName:@"Main" bundle:nil]];
+    return [self viewControllerAtIndex:index storyboard:[UIStoryboard storyboardWithName:@"Main" bundle:nil] andFrame:_dataFrame];
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
@@ -79,7 +82,7 @@
     if (index == [self.pageData count]) {
         return nil;
     }
-    return [self viewControllerAtIndex:index storyboard:[UIStoryboard storyboardWithName:@"Main" bundle:nil]];
+    return [self viewControllerAtIndex:index storyboard:[UIStoryboard storyboardWithName:@"Main" bundle:nil] andFrame:_dataFrame];
 }
 
 @end

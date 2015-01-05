@@ -27,10 +27,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.frame = [[UIScreen mainScreen] bounds];
+//    self.view.frame = [[UIScreen mainScreen] bounds];
 	// Do any additional setup after loading the view, typically from a nib.
     self.view.backgroundColor = [UIColor whiteColor];
-    [self loadDataAndView];
 }
 
 #pragma mark - LAYOUT FLOOR PLAN DATA
@@ -69,7 +68,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-	self.view.frame = [[UIScreen mainScreen] bounds];
+    [self loadDataAndView];
+//	self.view.frame = [[UIScreen mainScreen] bounds];
 	// otherwise plan stays zoomed in
 	// when you scroll to new page
 	[_zoomingScroll resetScroll];

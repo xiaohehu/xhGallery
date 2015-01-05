@@ -9,6 +9,10 @@
 #import "XHGalleryViewController.h"
 #import "embModelController.h"
 @interface XHGalleryViewController ()<UIPageViewControllerDelegate>
+{
+    float           view_width;
+    float           view_height;
+}
 
 //Top View
 @property (nonatomic, strong)           UIView                  *uiv_topView;
@@ -29,25 +33,36 @@
 @implementation XHGalleryViewController
 @synthesize modelController = _modelController;
 @synthesize delegate;
+@synthesize showCaption, showNavBar;
 - (id)init
 {
     if (self == [super init]) {
+
+        showNavBar = YES;
+        showCaption = YES;
+        
         self.view.backgroundColor = [UIColor redColor];
         _modelController = [[embModelController alloc] init];
         
         _arr_pageData = [[NSArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"photoData" ofType:@"plist"]] copy];
         _modelController = [[embModelController alloc] initWithImage:_arr_pageData];
-        [self initPageView:4];
-        _currentPage = 4;
+        [self addGestureToView];
     }
     return self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self createTopView];
-    [self createBottomView];
-    [self addGestureToView];
+    view_height = self.view.frame.size.height;
+    view_width = self.view.frame.size.width;
+    [self initPageView:4];
+    _currentPage = 4;
+    if (showCaption) {
+        [self createBottomView];
+    }
+    if (showNavBar) {
+        [self createTopView];
+    }
 }
 
 - (void)viewDidLoad {
@@ -92,21 +107,24 @@
 #pragma mark - Set Up top view
 - (void)createTopView
 {
-    _uiv_topView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 1024.0, 45.0)];
+    _uiv_topView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, view_width, 45.0)];
     _uiv_topView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.7];
     [self.view addSubview: _uiv_topView];
     
-    _uil_numLabel = [[UILabel alloc] initWithFrame:CGRectMake((1024-100)/2, 0, 100, 45)];
+    float labelWidth = (100.0/1024)*view_width;
+    float fontSize = (15.0/100)*labelWidth*2;
+    _uil_numLabel = [[UILabel alloc] initWithFrame:CGRectMake((view_width-labelWidth)/2, 0, labelWidth, 45)];
     _uil_numLabel.text = [NSString stringWithFormat:@"%i of %i", (int)_currentPage+1, (int)_arr_pageData.count];
     _uil_numLabel.textColor = [UIColor blackColor];
+    [_uil_numLabel setFont:[UIFont systemFontOfSize:fontSize]];
     [_uiv_topView addSubview: _uil_numLabel];
     
     _uib_back = [UIButton buttonWithType:UIButtonTypeCustom];
-    _uib_back.frame = CGRectMake(0.0, 0.0, 100.0, 45.0);
+    _uib_back.frame = CGRectMake(0.0, 0.0, labelWidth, 45.0);
     _uib_back.backgroundColor = [UIColor clearColor];
     [_uib_back setTitle:@"BACK" forState:UIControlStateNormal];
     [_uib_back setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [_uib_back.titleLabel setFont:[UIFont systemFontOfSize:15.0]];
+    [_uib_back.titleLabel setFont:[UIFont systemFontOfSize:fontSize]];
     [_uiv_topView addSubview: _uib_back];
     [_uib_back addTarget:self action:@selector(tapBackButton:) forControlEvents:UIControlEventTouchUpInside];
 }
@@ -120,7 +138,7 @@
 #pragma mark - Set up bottom View
 -(void)createBottomView
 {
-    _uiv_bottomView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 768-45, 1024, 45)];
+    _uiv_bottomView = [[UIView alloc] initWithFrame:CGRectMake(0.0, view_height-45, view_width, 45)];
     _uiv_bottomView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.7];
     [self.view addSubview: _uiv_bottomView];
     
@@ -150,7 +168,7 @@
     self.pageViewController.dataSource = self.modelController;
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.view.autoresizesSubviews =YES;
-    self.pageViewController.view.frame = CGRectMake(0.0, 0.0, 1024.0, 768.0);//self.view.bounds;
+    self.pageViewController.view.frame = CGRectMake(0.0, 0.0, view_width, view_height);//self.view.bounds;
     [self.pageViewController didMoveToParentViewController:self];
     [self addChildViewController:self.pageViewController];
     [self.view addSubview: self.pageViewController.view];
@@ -159,7 +177,7 @@
 }
 
 -(void)loadPage:(int)page {
-    embDataViewController *startingViewController = [self.modelController viewControllerAtIndex:page storyboard:[UIStoryboard storyboardWithName:@"Main" bundle:nil]];
+    embDataViewController *startingViewController = [self.modelController viewControllerAtIndex:page storyboard:[UIStoryboard storyboardWithName:@"Main" bundle:nil] andFrame:CGRectMake(0.0, 0.0, view_width, view_height)];
     
     NSArray *viewControllers = @[startingViewController];
     [self.pageViewController setViewControllers:viewControllers

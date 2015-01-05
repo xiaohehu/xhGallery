@@ -17,6 +17,8 @@
 
 @interface XHGalleryViewController : UIViewController
 
-@property (nonatomic, strong) id            delegate;
+@property (nonatomic, strong)       id              delegate;
+@property (nonatomic, readwrite)    BOOL            showNavBar;
+@property (nonatomic, readwrite)    BOOL            showCaption;
 
 @end
