@@ -111,8 +111,8 @@
     _uiv_topView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.7];
     [self.view addSubview: _uiv_topView];
     
-    float labelWidth = (100.0/1024)*view_width;
-    float fontSize = (15.0/100)*labelWidth*2;
+    float labelWidth = 100;//(100.0/1024)*view_width;
+    float fontSize = 15.0;//(15.0/100)*labelWidth;
     _uil_numLabel = [[UILabel alloc] initWithFrame:CGRectMake((view_width-labelWidth)/2, 0, labelWidth, 45)];
     _uil_numLabel.text = [NSString stringWithFormat:@"%i of %i", (int)_currentPage+1, (int)_arr_pageData.count];
     _uil_numLabel.textColor = [UIColor blackColor];
@@ -213,6 +213,28 @@
     int index = (int)[self.modelController indexOfViewController:theCurrentViewController];
     _currentPage = index;
     _uil_numLabel.text = [NSString stringWithFormat:@"%i of %i", (int)_currentPage+1, (int)_arr_pageData.count];
+}
+
+#pragma mark - Clean memory
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [_uiv_topView removeFromSuperview];
+    _uiv_topView = nil;
+    [_uil_numLabel removeFromSuperview];
+    _uil_numLabel = nil;
+    [_uib_back removeFromSuperview];
+    _uib_back = nil;
+    [_uiv_bottomView removeFromSuperview];
+    _uiv_bottomView = nil;
+    [_uil_caption removeFromSuperview];
+    _uil_caption = nil;
+    _modelController = nil;
+    _arr_pageData = nil;
+    [_pageViewController.view removeFromSuperview];
+    _pageViewController.view = nil;
+    [_pageViewController removeFromParentViewController];
+    _pageViewController = nil;
 }
 
 - (void)didReceiveMemoryWarning {

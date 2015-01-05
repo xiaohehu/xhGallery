@@ -31,7 +31,7 @@
 
     _gallery = [[XHGalleryViewController alloc] init];
     _gallery.delegate = self;
-    _gallery.view.frame = CGRectMake(0.0, 0.0, 200, 200);
+    _gallery.view.frame = CGRectMake(0.0, 0.0, 400, 300);
 //    _gallery.showNavBar = NO;
 //    _gallery.showCaption = NO;
     [self addChildViewController:_gallery];
@@ -45,7 +45,9 @@
                          _gallery.view.alpha = 0.0;
                      } completion:^(BOOL finshed){
                          [_gallery.view removeFromSuperview];
+                         _gallery.view = nil;
                          [_gallery removeFromParentViewController];
+                         _gallery = nil;
                      }];
 }
 
