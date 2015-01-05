@@ -12,6 +12,7 @@
 {
     float           view_width;
     float           view_height;
+    NSTimer         *tapTimer;
 }
 
 //Top View
@@ -40,7 +41,6 @@
 - (id)init
 {
     if (self == [super init]) {
-
         showNavBar = YES;
         showCaption = YES;
         
@@ -61,6 +61,7 @@
     
     [self initPageView:startIndex];
     _currentPage = startIndex;
+    
     if (showCaption) {
         [self createBottomView];
     }
@@ -79,11 +80,18 @@
 //----------------------------------------------------
 - (void)addGestureToView
 {
+    self.view.userInteractionEnabled = YES;
+    
     UITapGestureRecognizer *tapOnView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnView:)];
     tapOnView.numberOfTapsRequired = 1;
     tapOnView.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer: tapOnView];
-    self.view.userInteractionEnabled = YES;
+    
+    //Alloc a double tap(does nothing) to disable one tap 
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] init];
+    doubleTap.numberOfTapsRequired = 2;
+    [self.view addGestureRecognizer: doubleTap];
+    [tapOnView requireGestureRecognizerToFail:doubleTap];
 }
 
 - (void)tapOnView:(UIGestureRecognizer *)gesture
@@ -109,6 +117,8 @@
                          }];
     }
 }
+
+
 //----------------------------------------------------
 #pragma mark - Set Up top view
 //----------------------------------------------------
