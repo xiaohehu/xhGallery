@@ -26,11 +26,14 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
 }
-//----------------------------------------------------
-#pragma mark - Gallery View
-//----------------------------------------------------
-- (IBAction)tapButton:(id)sender {
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self viewDidLayoutSubviews];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
     _gallery = [[XHGalleryViewController alloc] init];
     _gallery.delegate = self;
     NSString *url = [[NSBundle mainBundle] pathForResource:@"photoData" ofType:@"plist"];
@@ -47,9 +50,17 @@
                              @"caption 9",
                              nil];
     _gallery.startIndex = 4;
+    _gallery.view.frame = self.view.bounds;
 //    _gallery.view.frame = CGRectMake(0.0, 0.0, 400, 300);
 //    _gallery.showNavBar = NO;
 //    _gallery.showCaption = NO;
+}
+//----------------------------------------------------
+#pragma mark - Gallery View
+//----------------------------------------------------
+- (IBAction)tapButton:(id)sender {
+
+
     [self addChildViewController:_gallery];
     [self.view addSubview: _gallery.view];
 }

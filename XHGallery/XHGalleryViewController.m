@@ -87,7 +87,7 @@
     tapOnView.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer: tapOnView];
     
-    //Alloc a double tap(does nothing) to disable one tap 
+    //Alloc a double tap (does nothing) to disable one tap
     UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] init];
     doubleTap.numberOfTapsRequired = 2;
     [self.view addGestureRecognizer: doubleTap];
@@ -117,7 +117,6 @@
                          }];
     }
 }
-
 
 //----------------------------------------------------
 #pragma mark - Set Up top view
@@ -252,6 +251,12 @@
     _uil_caption = nil;
     _modelController = nil;
     _arr_pageData = nil;
+    
+    for (UIView __strong *tmp in [_pageViewController.view subviews]) {
+        [tmp removeFromSuperview];
+        tmp = nil;
+    }
+    
     [_pageViewController.view removeFromSuperview];
     _pageViewController.view = nil;
     [_pageViewController removeFromParentViewController];

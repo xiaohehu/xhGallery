@@ -81,7 +81,8 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-
+    [_zoomingScroll removeFromSuperview];
+    _zoomingScroll = nil;
 }
 
 - (void)didReceiveMemoryWarning
