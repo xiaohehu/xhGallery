@@ -68,6 +68,7 @@
 }
 
 - (IBAction)tapButton:(id)sender {
+    _gallery.view.alpha = 1.0;
     [self addChildViewController:_gallery];
     [self.view addSubview: _gallery.view];
 }
@@ -81,9 +82,9 @@
                          _gallery.view.alpha = 0.0;
                      } completion:^(BOOL finshed){
                          [_gallery.view removeFromSuperview];
-                         _gallery.view = nil;
+//                         _gallery.view = nil;
                          [_gallery removeFromParentViewController];
-                         _gallery = nil;
+//                         _gallery = nil;
                      }];
 }
 
