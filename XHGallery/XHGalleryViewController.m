@@ -117,6 +117,7 @@
     _uil_numLabel.text = [NSString stringWithFormat:@"%i of %i", (int)_currentPage+1, (int)_arr_pageData.count];
     _uil_numLabel.textColor = [UIColor blackColor];
     [_uil_numLabel setFont:[UIFont systemFontOfSize:fontSize]];
+    _uil_numLabel.textAlignment = NSTextAlignmentCenter;
     [_uiv_topView addSubview: _uil_numLabel];
     
     _uib_back = [UIButton buttonWithType:UIButtonTypeCustom];
