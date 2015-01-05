@@ -32,15 +32,13 @@
     self.view.backgroundColor = [UIColor whiteColor];
 }
 
+//----------------------------------------------------
 #pragma mark - LAYOUT FLOOR PLAN DATA
+//----------------------------------------------------
 -(void)loadDataAndView
 {
     if (!_zoomingScroll) {
         CGRect theFrame = self.view.bounds;
-//        theFrame.origin.x = 35;
-//        theFrame.origin.y = 64;
-//        theFrame.size.width = 900;
-//        theFrame.size.height = 682;
         _zoomingScroll = [[ebZoomingScrollView alloc] initWithFrame:theFrame image:nil shouldZoom:YES];
         [self.view addSubview:_zoomingScroll];
         _zoomingScroll.backgroundColor = [UIColor clearColor];
@@ -64,12 +62,13 @@
     }];
 }
 
+//----------------------------------------------------
 #pragma mark - BOILERPLATE
+//----------------------------------------------------
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self loadDataAndView];
-//	self.view.frame = [[UIScreen mainScreen] bounds];
 	// otherwise plan stays zoomed in
 	// when you scroll to new page
 	[_zoomingScroll resetScroll];
