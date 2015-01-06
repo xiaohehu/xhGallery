@@ -45,7 +45,7 @@ static float        kBottomViewHeight   = 45.0;
 @synthesize modelController = _modelController;
 @synthesize delegate;
 @synthesize showCaption, showNavBar;
-@synthesize arr_captions, arr_images;
+@synthesize arr_captions, arr_images, arr_fileType;
 @synthesize startIndex;
 
 - (id)init
@@ -56,7 +56,6 @@ static float        kBottomViewHeight   = 45.0;
         
         self.view.backgroundColor = [UIColor redColor];
         _modelController = [[embModelController alloc] init];
-        _thumbsView = [[UIScrollView alloc]initWithFrame:self.view.bounds];
         _photoThumbnailViews = [[NSMutableArray alloc] init];
         [self addGestureToView];
     }
@@ -70,7 +69,10 @@ static float        kBottomViewHeight   = 45.0;
     
     _arr_pageData = [[NSArray arrayWithArray:arr_images] copy];
     _modelController = [[embModelController alloc] initWithImage:_arr_pageData];
-    
+    _thumbsView = [[UIScrollView alloc]initWithFrame:self.view.frame];
+    int numOfCell = view_width / (kThumbnailSize + kThumbnailSpacing);
+    float blankSapce = (view_width - (kThumbnailSpacing + kThumbnailSize)*numOfCell + kThumbnailSpacing)/2;
+    _thumbsView.contentInset = UIEdgeInsetsMake( kThumbnailSpacing, blankSapce, kThumbnailSpacing, kThumbnailSpacing);
     [self initPageView:startIndex];
     _currentPage = startIndex;
     
@@ -86,6 +88,7 @@ static float        kBottomViewHeight   = 45.0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self checkContentType];
     // Do any additional setup after loading the view.
 }
 
@@ -298,6 +301,7 @@ static float        kBottomViewHeight   = 45.0;
     _currentPage = (int)photoView.tag;
     _uil_numLabel.text = [NSString stringWithFormat:@"%i of %i", (int)_currentPage+1, (int)_arr_pageData.count];
     _uil_caption.text = [arr_captions objectAtIndex: _currentPage];
+    [self checkContentType];
 }
 
 
@@ -384,7 +388,20 @@ static float        kBottomViewHeight   = 45.0;
     _currentPage = index;
     _uil_numLabel.text = [NSString stringWithFormat:@"%i of %i", (int)_currentPage+1, (int)_arr_pageData.count];
     _uil_caption.text = [arr_captions objectAtIndex: _currentPage];
+    [self checkContentType];
 }
+
+- (void)checkContentType
+{
+    if ([arr_fileType[_currentPage] isEqualToString:@"movie"]) {
+       UIAlertView *alert =  [[UIAlertView alloc] initWithTitle:@"Movie"
+                                                        message:@"Should play a movie"
+                                                        delegate:nil
+                                                        cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+    }
+}
+
 //----------------------------------------------------
 #pragma mark - Clean memory
 //----------------------------------------------------
@@ -420,6 +437,10 @@ static float        kBottomViewHeight   = 45.0;
     _pageViewController.view = nil;
     [_pageViewController removeFromParentViewController];
     _pageViewController = nil;
+    
+    arr_captions = nil;
+    arr_fileType = nil;
+    arr_images = nil;
 }
 
 - (void)didReceiveMemoryWarning {
