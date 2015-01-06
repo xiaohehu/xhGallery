@@ -142,6 +142,7 @@ static float        kBottomViewHeight   = 45.0;
                          animations:^{
                              _uiv_topView.alpha = 0.0;
                              _uiv_bottomView.alpha = 0.0;
+                             _pageViewController.view.backgroundColor = [UIColor blackColor];
                          }
                          completion:^(BOOL finished){
                              _uiv_topView.hidden = YES;
@@ -155,6 +156,7 @@ static float        kBottomViewHeight   = 45.0;
                          animations:^{
                              _uiv_topView.alpha = 1.0;
                              _uiv_bottomView.alpha = 1.0;
+                             _pageViewController.view.backgroundColor = [UIColor whiteColor];
                          }];
     }
 }
@@ -165,7 +167,7 @@ static float        kBottomViewHeight   = 45.0;
 - (void)createTopView
 {
     _uiv_topView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, view_width, kTopViewHeight)];
-    _uiv_topView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.7];
+    _uiv_topView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
     [self.view addSubview: _uiv_topView];
     
     float labelWidth = 100;//(100.0/1024)*view_width;
@@ -180,7 +182,7 @@ static float        kBottomViewHeight   = 45.0;
     _uib_back = [UIButton buttonWithType:UIButtonTypeCustom];
     _uib_back.frame = CGRectMake(0.0, 0.0, labelWidth, kTopViewHeight);
     _uib_back.backgroundColor = [UIColor clearColor];
-    [_uib_back setTitle:@"BACK" forState:UIControlStateNormal];
+    [_uib_back setTitle:@"﹤ BACK" forState:UIControlStateNormal];
     [_uib_back setTitleColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0] forState:UIControlStateNormal];
     [_uib_back setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     [_uib_back.titleLabel setFont:[UIFont boldSystemFontOfSize:fontSize]];
@@ -324,7 +326,7 @@ static float        kBottomViewHeight   = 45.0;
 -(void)createBottomView
 {
     _uiv_bottomView = [[UIView alloc] initWithFrame:CGRectMake(0.0, view_height - kBottomViewHeight, view_width, kBottomViewHeight)];
-    _uiv_bottomView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.7];
+    _uiv_bottomView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
     [self.view addSubview: _uiv_bottomView];
     
     _uil_caption = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 0.0, 200.0, kBottomViewHeight)];

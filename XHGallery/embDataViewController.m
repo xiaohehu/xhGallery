@@ -29,7 +29,7 @@
     [super viewDidLoad];
 //    self.view.frame = [[UIScreen mainScreen] bounds];
 	// Do any additional setup after loading the view, typically from a nib.
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor clearColor];
 }
 
 //----------------------------------------------------
