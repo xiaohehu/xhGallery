@@ -39,6 +39,8 @@ static float        kBottomViewHeight   = 45.0;
 @property (strong, nonatomic)           UIPageViewController	*pageViewController;
 // thumbs view
 @property (nonatomic, strong)           UIScrollView            *thumbsView;
+// play button
+@property (nonatomic, strong)           UIImageView             *uiiv_playMovie;
 @end
 
 @implementation XHGalleryViewController
@@ -126,6 +128,15 @@ static float        kBottomViewHeight   = 45.0;
 
 - (void)tapOnView:(UIGestureRecognizer *)gesture
 {
+    if ([arr_fileType[_currentPage] isEqualToString:@"movie"] ) {
+       UIAlertView *alert =  [[UIAlertView alloc] initWithTitle:@"Movie"
+                                                       message:@"Should play a movie"
+                                                       delegate:nil
+                                                       cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+        return;
+    }
+    
     if (!_uiv_topView.hidden) {
         [UIView animateWithDuration:0.33
                          animations:^{
@@ -197,6 +208,7 @@ static float        kBottomViewHeight   = 45.0;
 
 -(void)tapSeeAllBtn:(id)sender
 {
+    [self removePlayButton];
     if (_isThumbViewShowing) {
         [self hideThumbnailViewWithAnimation:YES];
     }
@@ -364,6 +376,11 @@ static float        kBottomViewHeight   = 45.0;
 #pragma mark - PageViewController
 #pragma mark update page index
 //----------------------------------------------------
+- (void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray *)pendingViewControllers
+{
+    [self removePlayButton];
+}
+
 - (void)pageViewController:(UIPageViewController *)pvc didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
 {
     // If the page did not turn
@@ -372,6 +389,7 @@ static float        kBottomViewHeight   = 45.0;
         // You do nothing because whatever page you thought you were on
         // before the gesture started is still the correct page
         NSLog(@"same page");
+        [self checkContentType];
         return;
     }
     // This is where you would know the page number changed and handle it appropriately
@@ -393,13 +411,28 @@ static float        kBottomViewHeight   = 45.0;
 
 - (void)checkContentType
 {
+    
     if ([arr_fileType[_currentPage] isEqualToString:@"movie"]) {
-       UIAlertView *alert =  [[UIAlertView alloc] initWithTitle:@"Movie"
-                                                        message:@"Should play a movie"
-                                                        delegate:nil
-                                                        cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        [alert show];
+        [self createPlayIcon];
     }
+}
+
+//----------------------------------------------------
+#pragma mark - Create play icon
+//----------------------------------------------------
+
+- (void)createPlayIcon
+{
+    _uiiv_playMovie = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play_icon.png"]];
+    _uiiv_playMovie.frame = CGRectMake(0.0, 0.0, _uiiv_playMovie.frame.size.width, _uiiv_playMovie.frame.size.height);
+    _uiiv_playMovie.center = self.view.center;
+    [self.view addSubview: _uiiv_playMovie];
+}
+
+- (void)removePlayButton
+{
+    [_uiiv_playMovie removeFromSuperview];
+    _uiiv_playMovie = nil;
 }
 
 //----------------------------------------------------

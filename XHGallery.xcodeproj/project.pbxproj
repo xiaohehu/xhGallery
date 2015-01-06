@@ -19,6 +19,7 @@
 		826F417D1A4B378F00659F04 /* embModelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 826F417A1A4B378F00659F04 /* embModelController.m */; };
 		826F41801A4B48DA00659F04 /* XHGalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 826F417F1A4B48DA00659F04 /* XHGalleryViewController.m */; };
 		82BD26F61A5C372400BA4CBA /* FGalleryPhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 82BD26F51A5C372400BA4CBA /* FGalleryPhotoView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		82BD26F81A5C86D500BA4CBA /* play_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 82BD26F71A5C86D500BA4CBA /* play_icon.png */; };
 		82E27B351A56E6640023F33E /* Lobby Entry and Restuarant.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 82E27B2C1A56E6640023F33E /* Lobby Entry and Restuarant.jpg */; };
 		82E27B361A56E6640023F33E /* Lobby View.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 82E27B2D1A56E6640023F33E /* Lobby View.jpg */; };
 		82E27B371A56E6640023F33E /* Southeast View of Victory Center.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 82E27B2E1A56E6640023F33E /* Southeast View of Victory Center.jpg */; };
@@ -65,6 +66,7 @@
 		826F417F1A4B48DA00659F04 /* XHGalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHGalleryViewController.m; sourceTree = "<group>"; };
 		82BD26F41A5C372400BA4CBA /* FGalleryPhotoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FGalleryPhotoView.h; sourceTree = "<group>"; };
 		82BD26F51A5C372400BA4CBA /* FGalleryPhotoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FGalleryPhotoView.m; sourceTree = "<group>"; };
+		82BD26F71A5C86D500BA4CBA /* play_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play_icon.png; sourceTree = "<group>"; };
 		82E27B2C1A56E6640023F33E /* Lobby Entry and Restuarant.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Lobby Entry and Restuarant.jpg"; sourceTree = "<group>"; };
 		82E27B2D1A56E6640023F33E /* Lobby View.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Lobby View.jpg"; sourceTree = "<group>"; };
 		82E27B2E1A56E6640023F33E /* Southeast View of Victory Center.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Southeast View of Victory Center.jpg"; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				82BD26F41A5C372400BA4CBA /* FGalleryPhotoView.h */,
 				82BD26F51A5C372400BA4CBA /* FGalleryPhotoView.m */,
 				82E27B3E1A56E7030023F33E /* photoData.plist */,
+				82BD26F71A5C86D500BA4CBA /* play_icon.png */,
 				82E27B2B1A56E6640023F33E /* photo */,
 				826F415C1A4B1C3100659F04 /* Images.xcassets */,
 				826F415E1A4B1C3100659F04 /* LaunchScreen.xib */,
@@ -270,6 +273,7 @@
 				826F41601A4B1C3100659F04 /* LaunchScreen.xib in Resources */,
 				82E27B3C1A56E6640023F33E /* View 04.jpg in Resources */,
 				82E27B3D1A56E6640023F33E /* View of Victory Center and Dart Transit System.jpg in Resources */,
+				82BD26F81A5C86D500BA4CBA /* play_icon.png in Resources */,
 				82E27B3A1A56E6640023F33E /* Victory Center_Highway View.jpg in Resources */,
 				826F415D1A4B1C3100659F04 /* Images.xcassets in Resources */,
 				82E27B381A56E6640023F33E /* Soutwest View of Victory Center.jpg in Resources */,
