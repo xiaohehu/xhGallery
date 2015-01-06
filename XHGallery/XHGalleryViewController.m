@@ -173,7 +173,7 @@ static float        kBottomViewHeight   = 45.0;
     _uil_numLabel = [[UILabel alloc] initWithFrame:CGRectMake((view_width-labelWidth)/2, 0, labelWidth, kTopViewHeight)];
     _uil_numLabel.text = [NSString stringWithFormat:@"%i of %i", (int)_currentPage+1, (int)_arr_pageData.count];
     _uil_numLabel.textColor = [UIColor blackColor];
-    [_uil_numLabel setFont:[UIFont systemFontOfSize:fontSize]];
+    [_uil_numLabel setFont:[UIFont boldSystemFontOfSize:fontSize]];
     _uil_numLabel.textAlignment = NSTextAlignmentCenter;
     [_uiv_topView addSubview: _uil_numLabel];
     
@@ -181,9 +181,9 @@ static float        kBottomViewHeight   = 45.0;
     _uib_back.frame = CGRectMake(0.0, 0.0, labelWidth, kTopViewHeight);
     _uib_back.backgroundColor = [UIColor clearColor];
     [_uib_back setTitle:@"BACK" forState:UIControlStateNormal];
-    [_uib_back setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_uib_back setTitleColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0] forState:UIControlStateNormal];
     [_uib_back setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-    [_uib_back.titleLabel setFont:[UIFont systemFontOfSize:fontSize]];
+    [_uib_back.titleLabel setFont:[UIFont boldSystemFontOfSize:fontSize]];
     [_uiv_topView addSubview: _uib_back];
     [_uib_back addTarget:self action:@selector(tapBackButton:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -191,9 +191,9 @@ static float        kBottomViewHeight   = 45.0;
     _uib_seeAll.frame = CGRectMake(view_width - labelWidth, 0.0, labelWidth, kTopViewHeight);
     _uib_seeAll.backgroundColor = [UIColor clearColor];
     [_uib_seeAll setTitle:@"SEE ALL" forState:UIControlStateNormal];
-    [_uib_seeAll setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_uib_seeAll setTitleColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0] forState:UIControlStateNormal];
     [_uib_seeAll setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-    [_uib_seeAll.titleLabel setFont:[UIFont systemFontOfSize:fontSize]];
+    [_uib_seeAll.titleLabel setFont:[UIFont boldSystemFontOfSize:fontSize]];
     [_uib_seeAll addTarget:self action:@selector(tapSeeAllBtn:) forControlEvents:UIControlEventTouchUpInside];
     [_uiv_topView addSubview: _uib_seeAll];
 }
