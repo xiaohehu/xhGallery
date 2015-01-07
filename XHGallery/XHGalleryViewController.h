@@ -21,7 +21,5 @@
 @property (nonatomic, readwrite)    int             startIndex;
 @property (nonatomic, readwrite)    BOOL            showNavBar;
 @property (nonatomic, readwrite)    BOOL            showCaption;
-@property (nonatomic, strong)       NSArray         *arr_images;
-@property (nonatomic, strong)       NSArray         *arr_captions;
-@property (nonatomic, strong)       NSArray         *arr_fileType;
+@property (nonatomic, strong)       NSArray         *arr_rawData;
 @end

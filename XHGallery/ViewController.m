@@ -12,9 +12,7 @@
 @interface ViewController () <XHGalleryDelegate>
 {
     CGRect                      viewFrame;
-    NSMutableArray              *arr_galleryFiles;
-    NSMutableArray              *arr_galleryCaptions;
-    NSMutableArray              *arr_contentType;
+    NSArray                     *arr_rawData;
 }
 @property (nonatomic, strong)   XHGalleryViewController *gallery;
 
@@ -53,11 +51,9 @@
 {
     _gallery = [[XHGalleryViewController alloc] init];
     _gallery.delegate = self;
-    _gallery.arr_images = [[NSArray alloc] initWithArray:arr_galleryFiles];
-    _gallery.arr_captions = [[NSArray alloc] initWithArray: arr_galleryCaptions];
-    _gallery.arr_fileType = [[NSArray alloc] initWithArray:arr_contentType];
     _gallery.startIndex = startIndex;
     _gallery.view.frame = viewFrame;
+    _gallery.arr_rawData = [arr_rawData objectAtIndex:0];
 //    _gallery.view.frame = CGRectMake(0.0, 0.0, 400, 300);
 //    _gallery.showNavBar = NO;
 //    _gallery.showCaption = NO;
@@ -68,22 +64,7 @@
 - (void)prepareGalleryData
 {
     NSString *url = [[NSBundle mainBundle] pathForResource:@"photoData" ofType:@"plist"];
-    NSArray *arr_rawData = [[NSArray alloc] initWithContentsOfFile:url];
-    [arr_contentType removeAllObjects];
-    arr_contentType = nil;
-    arr_contentType = [[NSMutableArray alloc] init];
-    [arr_galleryFiles removeAllObjects];
-    arr_galleryFiles = nil;
-    arr_galleryFiles = [[NSMutableArray alloc] init];
-    [arr_galleryCaptions removeAllObjects];
-    arr_galleryCaptions = nil;
-    arr_galleryCaptions = [[NSMutableArray alloc] init];
-    
-    for (NSDictionary *dict_tmp in arr_rawData[0]) {
-        [arr_galleryFiles addObject: [dict_tmp objectForKey:@"file"]];
-        [arr_galleryCaptions addObject: [dict_tmp objectForKey:@"caption"]];
-        [arr_contentType addObject: [dict_tmp objectForKey:@"type"]];
-    }
+    arr_rawData = [[NSArray alloc] initWithContentsOfFile:url];
 }
 
 // Button's action to load gallery

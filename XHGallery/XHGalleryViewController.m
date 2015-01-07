@@ -17,25 +17,29 @@ static float        kBottomViewHeight   = 45.0;
 
 @interface XHGalleryViewController ()<UIPageViewControllerDelegate, FGalleryPhotoViewDelegate>
 {
+    int             itemsNum;
     float           view_width;
     float           view_height;
     NSTimer         *tapTimer;
     BOOL            _isThumbViewShowing;
     NSMutableArray  *_photoThumbnailViews;
+    
+    NSMutableArray  *arr_captions;
+    NSMutableArray  *arr_images;
+    NSMutableArray  *arr_fileType;
 }
 
 //Top View
 @property (nonatomic, strong)           UIView                  *uiv_topView;
 @property (nonatomic, strong)           UILabel                 *uil_numLabel;
 @property (nonatomic, strong)           UIButton                *uib_back;
-@property (nonatomic, strong)           UIButton                *uib_seeAll;
+@property (nonatomic, strong)           UIButton                *uib_thumbView;
 // Bottom View
 @property (nonatomic, strong)           UIView                  *uiv_bottomView;
 @property (nonatomic, strong)           UILabel                 *uil_caption;
 // Page View
 @property (nonatomic, readwrite)        NSInteger               currentPage;
 @property (readonly, strong, nonatomic) embModelController		*modelController;
-@property (readonly, strong, nonatomic) NSArray					*arr_pageData;
 @property (strong, nonatomic)           UIPageViewController	*pageViewController;
 // thumbs view
 @property (nonatomic, strong)           UIScrollView            *thumbsView;
@@ -48,7 +52,7 @@ static float        kBottomViewHeight   = 45.0;
 @synthesize modelController = _modelController;
 @synthesize delegate;
 @synthesize showCaption, showNavBar;
-@synthesize arr_captions, arr_images, arr_fileType;
+@synthesize arr_rawData;
 @synthesize startIndex;
 
 - (id)init
@@ -67,15 +71,17 @@ static float        kBottomViewHeight   = 45.0;
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    // Prepare data
+    [self prepareData];
     // Get current view's size
     view_height = self.view.frame.size.height;
     view_width = self.view.frame.size.width;
     
     // Get images
-    _arr_pageData = [[NSArray arrayWithArray:arr_images] copy];
+    
     
     // Init model controller
-    _modelController = [[embModelController alloc] initWithImage:_arr_pageData];
+    _modelController = [[embModelController alloc] initWithImage:arr_images];
     
     // Init thumbs view
     _thumbsView = [[UIScrollView alloc]initWithFrame:self.view.frame];
@@ -97,78 +103,23 @@ static float        kBottomViewHeight   = 45.0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self checkContentType];
-    // Do any additional setup after loading the view.
 }
 
 //----------------------------------------------------
-#pragma mark - Set up thumbs view
+#pragma mark - Prepare data
 //----------------------------------------------------
-
--(void)setUpThumbsView
+- (void)prepareData
 {
-    _thumbsView.backgroundColor = [UIColor whiteColor];
-    _thumbsView.hidden = YES;
-    [self.view addSubview: _thumbsView];
-    // create the thumbnail views
-    [self buildThumbsViewPhotos];
-}
-
-//----------------------------------------------------
-#pragma mark - Set Tap Gesture
-//----------------------------------------------------
-- (void)addGestureToView
-{
-    self.view.userInteractionEnabled = YES;
+    arr_images = [[NSMutableArray alloc] init];
+    arr_captions = [[NSMutableArray alloc] init];
+    arr_fileType = [[NSMutableArray alloc] init];
     
-    UITapGestureRecognizer *tapOnView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnView:)];
-    tapOnView.numberOfTapsRequired = 1;
-    tapOnView.numberOfTouchesRequired = 1;
-    [self.view addGestureRecognizer: tapOnView];
-    
-    //Alloc a double tap (does nothing) to avoid confliction between zooming and hiding top view
-    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] init];
-    doubleTap.numberOfTapsRequired = 2;
-    [self.view addGestureRecognizer: doubleTap];
-    [tapOnView requireGestureRecognizerToFail:doubleTap];
-}
-
-- (void)tapOnView:(UIGestureRecognizer *)gesture
-{
-    // If current type is movie, then play the file
-    if ([arr_fileType[_currentPage] isEqualToString:@"movie"] ) {
-        // Replace the alert code to play movie code
-       UIAlertView *alert =  [[UIAlertView alloc] initWithTitle:@"Movie"
-                                                       message:@"Should play a movie"
-                                                       delegate:nil
-                                                       cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        [alert show];
-        return;
+    for (NSDictionary *dict_tmp in arr_rawData) {
+        [arr_images addObject: [dict_tmp objectForKey:@"file"]];
+        [arr_captions addObject: [dict_tmp objectForKey:@"caption"]];
+        [arr_fileType addObject: [dict_tmp objectForKey:@"type"]];
     }
-    
-    //If current type is image, tap to hide top and bottom views
-    if (!_uiv_topView.hidden) {
-        [UIView animateWithDuration:0.33
-                         animations:^{
-                             _uiv_topView.alpha = 0.0;
-                             _uiv_bottomView.alpha = 0.0;
-                             _pageViewController.view.backgroundColor = [UIColor blackColor];
-                         }
-                         completion:^(BOOL finished){
-                             _uiv_topView.hidden = YES;
-                             _uiv_bottomView.hidden = YES;
-                         }];
-    }
-    else {
-        _uiv_topView.hidden = NO;
-        _uiv_bottomView.hidden = NO;
-        [UIView animateWithDuration:0.33
-                         animations:^{
-                             _uiv_topView.alpha = 1.0;
-                             _uiv_bottomView.alpha = 1.0;
-                             _pageViewController.view.backgroundColor = [UIColor whiteColor];
-                         }];
-    }
+    itemsNum = arr_images.count;
 }
 
 //----------------------------------------------------
@@ -183,7 +134,7 @@ static float        kBottomViewHeight   = 45.0;
     float labelWidth = 100; // With for top view's buttons and label
     float fontSize = 15.0;
     _uil_numLabel = [[UILabel alloc] initWithFrame:CGRectMake((view_width-labelWidth)/2, 0, labelWidth, kTopViewHeight)];
-    _uil_numLabel.text = [NSString stringWithFormat:@"%i of %i", (int)_currentPage+1, (int)_arr_pageData.count];
+    _uil_numLabel.text = [NSString stringWithFormat:@"%i of %i", (int)_currentPage+1, itemsNum];
     _uil_numLabel.textColor = [UIColor blackColor];
     [_uil_numLabel setFont:[UIFont boldSystemFontOfSize:fontSize]];
     _uil_numLabel.textAlignment = NSTextAlignmentCenter;
@@ -199,25 +150,41 @@ static float        kBottomViewHeight   = 45.0;
     [_uiv_topView addSubview: _uib_back];
     [_uib_back addTarget:self action:@selector(tapBackButton:) forControlEvents:UIControlEventTouchUpInside];
     
-    _uib_seeAll = [UIButton buttonWithType:UIButtonTypeCustom];
-    _uib_seeAll.frame = CGRectMake(view_width - labelWidth, 0.0, labelWidth, kTopViewHeight);
-    _uib_seeAll.backgroundColor = [UIColor clearColor];
-    [_uib_seeAll setTitle:@"SEE ALL" forState:UIControlStateNormal];
-    [_uib_seeAll setTitleColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0] forState:UIControlStateNormal];
-    [_uib_seeAll setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-    [_uib_seeAll.titleLabel setFont:[UIFont boldSystemFontOfSize:fontSize]];
-    [_uib_seeAll addTarget:self action:@selector(tapSeeAllBtn:) forControlEvents:UIControlEventTouchUpInside];
-    [_uiv_topView addSubview: _uib_seeAll];
+    _uib_thumbView = [UIButton buttonWithType:UIButtonTypeCustom];
+    _uib_thumbView.frame = CGRectMake(view_width - labelWidth, 0.0, labelWidth, kTopViewHeight);
+    _uib_thumbView.backgroundColor = [UIColor clearColor];
+    [_uib_thumbView setTitle:@"SEE ALL" forState:UIControlStateNormal];
+    [_uib_thumbView setTitleColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0] forState:UIControlStateNormal];
+    [_uib_thumbView setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+    [_uib_thumbView.titleLabel setFont:[UIFont boldSystemFontOfSize:fontSize]];
+    [_uib_thumbView addTarget:self action:@selector(loadThumbsView:) forControlEvents:UIControlEventTouchUpInside];
+    [_uiv_topView addSubview: _uib_thumbView];
 }
 
+//----------------------------------------------------
 #pragma mark Delegate for Back button
+//----------------------------------------------------
 - (void)tapBackButton:(id)sender
 {
     [self.delegate didRemoveFromSuperView];
 }
 
-#pragma mark Load See all view
--(void)tapSeeAllBtn:(id)sender
+//----------------------------------------------------
+#pragma mark  Set up thumbs view
+//----------------------------------------------------
+
+-(void)setUpThumbsView
+{
+    _thumbsView.backgroundColor = [UIColor whiteColor];
+    _thumbsView.hidden = YES;
+    [self.view addSubview: _thumbsView];
+    // create the thumbnail views
+    [self buildThumbsViewPhotos];
+}
+//----------------------------------------------------
+#pragma mark Load thumbs view
+//----------------------------------------------------
+-(void)loadThumbsView:(id)sender
 {
     [self removePlayButton];
     
@@ -233,9 +200,9 @@ static float        kBottomViewHeight   = 45.0;
 {
     _isThumbViewShowing = YES;
     
-    [self arrangeThumbs];
+    [self layoutThumbs];
     [self.navigationItem.rightBarButtonItem setTitle:NSLocalizedString(@"Close", @"")];
-    [_uib_seeAll setTitle:@"Close" forState:UIControlStateNormal];
+    [_uib_thumbView setTitle:@"Close" forState:UIControlStateNormal];
     if (animation) {
         // do curl animation
         [UIView beginAnimations:@"uncurl" context:nil];
@@ -254,7 +221,7 @@ static float        kBottomViewHeight   = 45.0;
 {
     _isThumbViewShowing = NO;
     [self.navigationItem.rightBarButtonItem setTitle:NSLocalizedString(@"See all", @"")];
-    [_uib_seeAll setTitle:@"See All" forState:UIControlStateNormal];
+    [_uib_thumbView setTitle:@"See All" forState:UIControlStateNormal];
     if (animation) {
         // do curl animation
         [UIView beginAnimations:@"curl" context:nil];
@@ -271,14 +238,14 @@ static float        kBottomViewHeight   = 45.0;
 // creates all the image views for this gallery
 - (void)buildThumbsViewPhotos
 {
-    NSUInteger i, count = _arr_pageData.count;
+    NSUInteger i, count = itemsNum;
     for (i = 0; i < count; i++) {
         
         FGalleryPhotoView *thumbView = [[FGalleryPhotoView alloc] initWithFrame:CGRectZero target:self action:@selector(handleThumbClick:)];
         [thumbView setContentMode:UIViewContentModeScaleAspectFill];
         [thumbView setClipsToBounds:YES];
         [thumbView setTag:i];
-        UIImage *rawImage = [UIImage imageNamed:_arr_pageData[i]];
+        UIImage *rawImage = [UIImage imageNamed:arr_images[i]];
         UIGraphicsBeginImageContext(CGSizeMake(kThumbnailSize,kThumbnailSize));
         [rawImage drawInRect: CGRectMake(0, 0, kThumbnailSize, kThumbnailSize)];
         UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
@@ -289,7 +256,7 @@ static float        kBottomViewHeight   = 45.0;
     }
 }
 
-- (void)arrangeThumbs
+- (void)layoutThumbs
 {
     float dx = 0.0;
     float dy = 49.0;
@@ -323,12 +290,10 @@ static float        kBottomViewHeight   = 45.0;
     [self hideThumbnailViewWithAnimation:YES];
     [self loadPage:(int)photoView.tag];
     _currentPage = (int)photoView.tag;
-    _uil_numLabel.text = [NSString stringWithFormat:@"%i of %i", (int)_currentPage+1, (int)_arr_pageData.count];
+    _uil_numLabel.text = [NSString stringWithFormat:@"%i of %i", (int)_currentPage+1, itemsNum];
     _uil_caption.text = [arr_captions objectAtIndex: _currentPage];
-    [self checkContentType];
+    [self checkPageViewContentType];
 }
-
-
 
 //----------------------------------------------------
 #pragma mark - Set up bottom View
@@ -348,14 +313,16 @@ static float        kBottomViewHeight   = 45.0;
 }
 
 //----------------------------------------------------
-#pragma mark - Set up page view
+#pragma mark - PageViewController
+
+#pragma mark Set up page view
 //----------------------------------------------------
 - (embModelController *)modelController
 {
     // Return the model controller object, creating it if necessary.
     // In more complex implementations, the model controller may be passed to the view controller.
     if (!_modelController) {
-        _modelController = [[embModelController alloc] initWithImage:_arr_pageData];
+        _modelController = [[embModelController alloc] initWithImage:arr_images];
     }
     return _modelController;
 }
@@ -387,7 +354,6 @@ static float        kBottomViewHeight   = 45.0;
 }
 
 //----------------------------------------------------
-#pragma mark - PageViewController
 #pragma mark update page index
 //----------------------------------------------------
 - (void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray *)pendingViewControllers
@@ -403,7 +369,7 @@ static float        kBottomViewHeight   = 45.0;
         // You do nothing because whatever page you thought you were on
         // before the gesture started is still the correct page
         NSLog(@"same page");
-        [self checkContentType];
+        [self checkPageViewContentType];
         return;
     }
     // This is where you would know the page number changed and handle it appropriately
@@ -418,12 +384,15 @@ static float        kBottomViewHeight   = 45.0;
     embDataViewController *theCurrentViewController = [self.pageViewController.viewControllers objectAtIndex:0];
     int index = (int)[self.modelController indexOfViewController:theCurrentViewController];
     _currentPage = index;
-    _uil_numLabel.text = [NSString stringWithFormat:@"%i of %i", (int)_currentPage+1, (int)_arr_pageData.count];
+    _uil_numLabel.text = [NSString stringWithFormat:@"%i of %i", (int)_currentPage+1, itemsNum];
     _uil_caption.text = [arr_captions objectAtIndex: _currentPage];
-    [self checkContentType];
+    [self checkPageViewContentType];
 }
 
-- (void)checkContentType
+//----------------------------------------------------
+#pragma mark - Check current content type
+//----------------------------------------------------
+- (void)checkPageViewContentType
 {
     if ([arr_fileType[_currentPage] isEqualToString:@"movie"]) {
         [self createPlayIcon];
@@ -431,7 +400,7 @@ static float        kBottomViewHeight   = 45.0;
 }
 
 //----------------------------------------------------
-#pragma mark - Create play icon for movie files
+#pragma mark Create play icon for movie files
 //----------------------------------------------------
 
 - (void)createPlayIcon
@@ -449,6 +418,67 @@ static float        kBottomViewHeight   = 45.0;
 {
     [_uiiv_playMovie removeFromSuperview];
     _uiiv_playMovie = nil;
+}
+
+//----------------------------------------------------
+#pragma mark Actions for other type of files
+//----------------------------------------------------
+
+//----------------------------------------------------
+#pragma mark - Set Tap Gesture
+//----------------------------------------------------
+- (void)addGestureToView
+{
+    self.view.userInteractionEnabled = YES;
+    
+    UITapGestureRecognizer *tapOnView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnView:)];
+    tapOnView.numberOfTapsRequired = 1;
+    tapOnView.numberOfTouchesRequired = 1;
+    [self.view addGestureRecognizer: tapOnView];
+    
+    //Alloc a double tap (does nothing) to avoid confliction between zooming and hiding top view
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] init];
+    doubleTap.numberOfTapsRequired = 2;
+    [self.view addGestureRecognizer: doubleTap];
+    [tapOnView requireGestureRecognizerToFail:doubleTap];
+}
+
+- (void)tapOnView:(UIGestureRecognizer *)gesture
+{
+    // If current type is movie, then play the file
+    if ([arr_fileType[_currentPage] isEqualToString:@"movie"] ) {
+        // Replace the alert code to play movie code
+        UIAlertView *alert =  [[UIAlertView alloc] initWithTitle:@"Movie"
+                                                         message:@"Should play a movie"
+                                                        delegate:nil
+                                               cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+        return;
+    }
+    
+    //If current type is image, tap to hide top and bottom views
+    if (!_uiv_topView.hidden) {
+        [UIView animateWithDuration:0.33
+                         animations:^{
+                             _uiv_topView.alpha = 0.0;
+                             _uiv_bottomView.alpha = 0.0;
+                             _pageViewController.view.backgroundColor = [UIColor blackColor];
+                         }
+                         completion:^(BOOL finished){
+                             _uiv_topView.hidden = YES;
+                             _uiv_bottomView.hidden = YES;
+                         }];
+    }
+    else {
+        _uiv_topView.hidden = NO;
+        _uiv_bottomView.hidden = NO;
+        [UIView animateWithDuration:0.33
+                         animations:^{
+                             _uiv_topView.alpha = 1.0;
+                             _uiv_bottomView.alpha = 1.0;
+                             _pageViewController.view.backgroundColor = [UIColor whiteColor];
+                         }];
+    }
 }
 
 //----------------------------------------------------
@@ -473,8 +503,6 @@ static float        kBottomViewHeight   = 45.0;
     
     _modelController = nil;
     
-    _arr_pageData = nil;
-    
     [_photoThumbnailViews removeAllObjects];
     _photoThumbnailViews = nil;
     
@@ -496,9 +524,14 @@ static float        kBottomViewHeight   = 45.0;
     [_pageViewController removeFromParentViewController];
     _pageViewController = nil;
     
-    arr_captions = nil;
-    arr_fileType = nil;
+    [arr_images removeAllObjects];
     arr_images = nil;
+    
+    [arr_captions removeAllObjects];
+    arr_captions = nil;
+    
+    [arr_fileType removeAllObjects];
+    arr_fileType = nil;
 }
 
 - (void)didReceiveMemoryWarning {
