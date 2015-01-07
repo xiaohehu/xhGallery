@@ -44,6 +44,15 @@
 #pragma mark - Gallery View
 //----------------------------------------------------
 /*
+ * Prepare data from plist
+ */
+- (void)prepareGalleryData
+{
+    NSString *url = [[NSBundle mainBundle] pathForResource:@"photoData" ofType:@"plist"];
+    arr_rawData = [[NSArray alloc] initWithContentsOfFile:url];
+}
+
+/*
  *To make sure the frame correct under iOS7,
  *Call thre createGallery method in ViewDidAppear:
  */
@@ -57,14 +66,6 @@
 //    _gallery.view.frame = CGRectMake(0.0, 0.0, 400, 300);
 //    _gallery.showNavBar = NO;
 //    _gallery.showCaption = NO;
-}
-/*
- * Prepare data from plist
- */
-- (void)prepareGalleryData
-{
-    NSString *url = [[NSBundle mainBundle] pathForResource:@"photoData" ofType:@"plist"];
-    arr_rawData = [[NSArray alloc] initWithContentsOfFile:url];
 }
 
 // Button's action to load gallery
