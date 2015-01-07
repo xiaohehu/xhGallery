@@ -29,6 +29,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self prepareGalleryData];
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -48,22 +49,22 @@
  *To make sure the frame correct under iOS7,
  *Call thre createGallery method in ViewDidAppear:
  */
-- (void)createGallery
+- (void)createGallery:(int)startIndex
 {
-    [self prepareGalleryData];
-    
     _gallery = [[XHGalleryViewController alloc] init];
     _gallery.delegate = self;
     _gallery.arr_images = [[NSArray alloc] initWithArray:arr_galleryFiles];
     _gallery.arr_captions = [[NSArray alloc] initWithArray: arr_galleryCaptions];
     _gallery.arr_fileType = [[NSArray alloc] initWithArray:arr_contentType];
-    _gallery.startIndex = 4;
+    _gallery.startIndex = startIndex;
     _gallery.view.frame = viewFrame;
 //    _gallery.view.frame = CGRectMake(0.0, 0.0, 400, 300);
 //    _gallery.showNavBar = NO;
 //    _gallery.showCaption = NO;
 }
-
+/*
+ * Prepare data from plist
+ */
 - (void)prepareGalleryData
 {
     NSString *url = [[NSBundle mainBundle] pathForResource:@"photoData" ofType:@"plist"];
@@ -85,8 +86,14 @@
     }
 }
 
+// Button's action to load gallery
 - (IBAction)tapButton:(id)sender {
-    [self createGallery];
+    [self createGallery:4];
+    [self addChildViewController:_gallery];
+    [self.view addSubview: _gallery.view];
+}
+- (IBAction)tapStartButton:(id)sender {
+    [self createGallery:0];
     [self addChildViewController:_gallery];
     [self.view addSubview: _gallery.view];
 }

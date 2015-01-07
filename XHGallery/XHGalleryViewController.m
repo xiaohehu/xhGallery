@@ -44,6 +44,7 @@ static float        kBottomViewHeight   = 45.0;
 @end
 
 @implementation XHGalleryViewController
+
 @synthesize modelController = _modelController;
 @synthesize delegate;
 @synthesize showCaption, showNavBar;
@@ -66,20 +67,26 @@ static float        kBottomViewHeight   = 45.0;
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    // Get current view's size
     view_height = self.view.frame.size.height;
     view_width = self.view.frame.size.width;
     
+    // Get images
     _arr_pageData = [[NSArray arrayWithArray:arr_images] copy];
+    
+    // Init model controller
     _modelController = [[embModelController alloc] initWithImage:_arr_pageData];
+    
+    // Init thumbs view
     _thumbsView = [[UIScrollView alloc]initWithFrame:self.view.frame];
-    int numOfCell = view_width / (kThumbnailSize + kThumbnailSpacing);
-    float blankSapce = (view_width - (kThumbnailSpacing + kThumbnailSize)*numOfCell + kThumbnailSpacing)/2;
+    int numOfCellEachLine = view_width / (kThumbnailSize + kThumbnailSpacing);
+    float blankSapce = (view_width - (kThumbnailSpacing + kThumbnailSize)*numOfCellEachLine + kThumbnailSpacing)/2;
     _thumbsView.contentInset = UIEdgeInsetsMake( kThumbnailSpacing, blankSapce, kThumbnailSpacing, kThumbnailSpacing);
     [self initPageView:startIndex];
     _currentPage = startIndex;
-    
     [self setUpThumbsView];
     
+    // Check and load top & bottom views
     if (showCaption) {
         [self createBottomView];
     }
@@ -100,8 +107,8 @@ static float        kBottomViewHeight   = 45.0;
 
 -(void)setUpThumbsView
 {
-    _thumbsView.backgroundColor					= [UIColor whiteColor];
-    _thumbsView.hidden							= YES;
+    _thumbsView.backgroundColor = [UIColor whiteColor];
+    _thumbsView.hidden = YES;
     [self.view addSubview: _thumbsView];
     // create the thumbnail views
     [self buildThumbsViewPhotos];
@@ -119,7 +126,7 @@ static float        kBottomViewHeight   = 45.0;
     tapOnView.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer: tapOnView];
     
-    //Alloc a double tap (does nothing) to disable one tap
+    //Alloc a double tap (does nothing) to avoid confliction between zooming and hiding top view
     UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] init];
     doubleTap.numberOfTapsRequired = 2;
     [self.view addGestureRecognizer: doubleTap];
@@ -128,7 +135,9 @@ static float        kBottomViewHeight   = 45.0;
 
 - (void)tapOnView:(UIGestureRecognizer *)gesture
 {
+    // If current type is movie, then play the file
     if ([arr_fileType[_currentPage] isEqualToString:@"movie"] ) {
+        // Replace the alert code to play movie code
        UIAlertView *alert =  [[UIAlertView alloc] initWithTitle:@"Movie"
                                                        message:@"Should play a movie"
                                                        delegate:nil
@@ -137,6 +146,7 @@ static float        kBottomViewHeight   = 45.0;
         return;
     }
     
+    //If current type is image, tap to hide top and bottom views
     if (!_uiv_topView.hidden) {
         [UIView animateWithDuration:0.33
                          animations:^{
@@ -170,8 +180,8 @@ static float        kBottomViewHeight   = 45.0;
     _uiv_topView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
     [self.view addSubview: _uiv_topView];
     
-    float labelWidth = 100;//(100.0/1024)*view_width;
-    float fontSize = 15.0;//(15.0/100)*labelWidth;
+    float labelWidth = 100; // With for top view's buttons and label
+    float fontSize = 15.0;
     _uil_numLabel = [[UILabel alloc] initWithFrame:CGRectMake((view_width-labelWidth)/2, 0, labelWidth, kTopViewHeight)];
     _uil_numLabel.text = [NSString stringWithFormat:@"%i of %i", (int)_currentPage+1, (int)_arr_pageData.count];
     _uil_numLabel.textColor = [UIColor blackColor];
@@ -207,10 +217,10 @@ static float        kBottomViewHeight   = 45.0;
 }
 
 #pragma mark Load See all view
-
 -(void)tapSeeAllBtn:(id)sender
 {
     [self removePlayButton];
+    
     if (_isThumbViewShowing) {
         [self hideThumbnailViewWithAnimation:YES];
     }
@@ -351,7 +361,9 @@ static float        kBottomViewHeight   = 45.0;
 }
 
 -(void)initPageView:(NSInteger)index {
-    self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
+    self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
+                                                              navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
+                                                                            options:[NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:40.0f] forKey:UIPageViewControllerOptionInterPageSpacingKey]];
     self.pageViewController.delegate = self;
     self.pageViewController.dataSource = self.modelController;
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -361,7 +373,7 @@ static float        kBottomViewHeight   = 45.0;
     [self addChildViewController:self.pageViewController];
     [self.view addSubview: self.pageViewController.view];
     [self.pageViewController.view setBackgroundColor:[UIColor whiteColor]];
-    [self loadPage:index];
+    [self loadPage:(int)index];
 }
 
 -(void)loadPage:(int)page {
@@ -413,14 +425,13 @@ static float        kBottomViewHeight   = 45.0;
 
 - (void)checkContentType
 {
-    
     if ([arr_fileType[_currentPage] isEqualToString:@"movie"]) {
         [self createPlayIcon];
     }
 }
 
 //----------------------------------------------------
-#pragma mark - Create play icon
+#pragma mark - Create play icon for movie files
 //----------------------------------------------------
 
 - (void)createPlayIcon
@@ -428,7 +439,10 @@ static float        kBottomViewHeight   = 45.0;
     _uiiv_playMovie = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play_icon.png"]];
     _uiiv_playMovie.frame = CGRectMake(0.0, 0.0, _uiiv_playMovie.frame.size.width, _uiiv_playMovie.frame.size.height);
     _uiiv_playMovie.center = self.view.center;
-    [self.view addSubview: _uiiv_playMovie];
+    _uiiv_playMovie.contentMode = UIViewContentModeScaleAspectFit;
+    [_pageViewController.view addSubview: _uiiv_playMovie];
+    UIViewController *viewController = _pageViewController.viewControllers[0];
+    [viewController.view viewWithTag:100].userInteractionEnabled = NO;
 }
 
 - (void)removePlayButton

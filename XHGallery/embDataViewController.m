@@ -43,6 +43,7 @@
         [self.view addSubview:_zoomingScroll];
         _zoomingScroll.backgroundColor = [UIColor clearColor];
         _zoomingScroll.delegate=self;
+        _zoomingScroll.tag = 100;
     }
     
     // plan info data
@@ -52,14 +53,14 @@
 
 -(void)loadInImge:(NSString *)imageName
 {
-    [UIView animateWithDuration:0.0 animations:^{
-        _zoomingScroll.blurView.alpha = 0.0;
-    } completion:^(BOOL finished){
+//    [UIView animateWithDuration:0.0 animations:^{
+//        _zoomingScroll.blurView.alpha = 0.0;
+//    } completion:^(BOOL finished){
         _zoomingScroll.blurView.image = [UIImage imageNamed:imageName];
-        [UIView animateWithDuration:0.3 animations:^{
-            _zoomingScroll.blurView.alpha = 1.0;
-        }];
-    }];
+//        [UIView animateWithDuration:0.3 animations:^{
+//            _zoomingScroll.blurView.alpha = 1.0;
+//        }];
+//    }];
 }
 
 //----------------------------------------------------
