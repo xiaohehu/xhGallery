@@ -444,7 +444,7 @@ static float        kBottomViewHeight   = 45.0;
     UIViewController *viewController = _pageViewController.viewControllers[0];
     [viewController.view viewWithTag:100].userInteractionEnabled = NO;
 }
-
+// Remove the play icon image when change page or load thumbs view
 - (void)removePlayButton
 {
     [_uiiv_playMovie removeFromSuperview];
@@ -458,15 +458,21 @@ static float        kBottomViewHeight   = 45.0;
 {
     [_uiv_topView removeFromSuperview];
     _uiv_topView = nil;
+    
     [_uil_numLabel removeFromSuperview];
     _uil_numLabel = nil;
+    
     [_uib_back removeFromSuperview];
     _uib_back = nil;
+    
     [_uiv_bottomView removeFromSuperview];
     _uiv_bottomView = nil;
+    
     [_uil_caption removeFromSuperview];
     _uil_caption = nil;
+    
     _modelController = nil;
+    
     _arr_pageData = nil;
     
     [_photoThumbnailViews removeAllObjects];
@@ -474,6 +480,9 @@ static float        kBottomViewHeight   = 45.0;
     
     [_thumbsView removeFromSuperview];
     _thumbsView = nil;
+    
+    [_uiiv_playMovie removeFromSuperview];
+    _uiiv_playMovie = nil;
     
     _isThumbViewShowing = NO;
     
