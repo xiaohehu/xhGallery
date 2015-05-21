@@ -38,7 +38,7 @@
 -(void)loadDataAndView
 {
     if (!_zoomingScroll) {
-        CGRect theFrame = self.view.bounds;
+        CGRect theFrame = self.view.frame;
         _zoomingScroll = [[ebZoomingScrollView alloc] initWithFrame:theFrame image:nil shouldZoom:YES];
         [self.view addSubview:_zoomingScroll];
         _zoomingScroll.backgroundColor = [UIColor clearColor];
@@ -78,6 +78,11 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
 
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [self.view layoutIfNeeded];
 }
 
 - (void)viewDidDisappear:(BOOL)animated

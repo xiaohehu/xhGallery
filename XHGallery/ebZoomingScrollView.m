@@ -57,6 +57,12 @@
 	return self;
 }
 
+- (void)layoutSubviews
+{
+    _scrollView.frame = self.frame;
+    _blurView.frame = self.frame;
+}
+
 -(void)lockZoom
 {
     maximumZoomScale = self.scrollView.maximumZoomScale;

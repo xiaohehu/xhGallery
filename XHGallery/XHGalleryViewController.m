@@ -99,10 +99,20 @@ static float        kBottomViewHeight   = 45.0;
     if (showNavBar) {
         [self createTopView];
     }
+    
+    [self.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+}
+
+- (void)willRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [self.view layoutIfNeeded];
+//    _uiv_topView.frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, kTopViewHeight);
+//    _uiv_bottomView.frame =CGRectMake(0.0, view_height - kBottomViewHeight, view_width, kBottomViewHeight);
+//    _uil_numLabel.frame = CGRectMake((self.view.frame.size.width-100)/2, 0, 100, kTopViewHeight);
 }
 
 //----------------------------------------------------
@@ -127,18 +137,93 @@ static float        kBottomViewHeight   = 45.0;
 //----------------------------------------------------
 - (void)createTopView
 {
-    _uiv_topView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, view_width, kTopViewHeight)];
+    _uiv_topView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, kTopViewHeight)];
     _uiv_topView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
+    _uiv_topView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self.view addSubview: _uiv_topView];
+    
+    // Width constraint, self.vew width
+    [_uiv_topView addConstraint:[NSLayoutConstraint constraintWithItem:_uiv_topView
+                                                          attribute:NSLayoutAttributeWidth
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:nil
+                                                          attribute:NSLayoutAttributeWidth
+                                                         multiplier:1.0
+                                                           constant:self.view.frame.size.width]];
+    
+    // Height constraint, kTopViewHeight
+    [_uiv_topView addConstraint:[NSLayoutConstraint constraintWithItem:_uiv_topView
+                                                          attribute:NSLayoutAttributeHeight
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:nil
+                                                          attribute:NSLayoutAttributeHeight
+                                                         multiplier:1.0
+                                                           constant:kTopViewHeight]];
+    
+    // X constraint, 0.0
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_uiv_topView
+                                                          attribute:NSLayoutAttributeCenterX
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeCenterX
+                                                         multiplier:1.0
+                                                           constant:0.0]];
+    // Y constraint, 0.0
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_uiv_topView
+                                                          attribute:NSLayoutAttributeTop
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeTop
+                                                         multiplier:1.0
+                                                           constant:0.0]];
+    
     
     float labelWidth = 100; // With for top view's buttons and label
     float fontSize = 15.0;
-    _uil_numLabel = [[UILabel alloc] initWithFrame:CGRectMake((view_width-labelWidth)/2, 0, labelWidth, kTopViewHeight)];
+    _uil_numLabel = [[UILabel alloc] initWithFrame:CGRectMake((_uiv_topView.frame.size.width-labelWidth)/2, 0, labelWidth, kTopViewHeight)];
+    _uil_numLabel.translatesAutoresizingMaskIntoConstraints = NO;
     _uil_numLabel.text = [NSString stringWithFormat:@"%i of %i", (int)_currentPage+1, itemsNum];
     _uil_numLabel.textColor = [UIColor blackColor];
     [_uil_numLabel setFont:[UIFont boldSystemFontOfSize:fontSize]];
     _uil_numLabel.textAlignment = NSTextAlignmentCenter;
     [_uiv_topView addSubview: _uil_numLabel];
+    // Width constraint, 100
+    [_uil_numLabel addConstraint:[NSLayoutConstraint constraintWithItem:_uil_numLabel
+                                                          attribute:NSLayoutAttributeWidth
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:nil
+                                                          attribute:NSLayoutAttributeWidth
+                                                         multiplier:1.0
+                                                           constant:labelWidth]];
+    
+    // Height constraint, kTopViewHeight
+    [_uil_numLabel addConstraint:[NSLayoutConstraint constraintWithItem:_uil_numLabel
+                                                          attribute:NSLayoutAttributeHeight
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:nil
+                                                          attribute:NSLayoutAttributeHeight
+                                                         multiplier:1.0
+                                                           constant:kTopViewHeight]];
+    
+    // X constraint, 0.0
+    [_uiv_topView addConstraint:[NSLayoutConstraint constraintWithItem:_uil_numLabel
+                                                          attribute:NSLayoutAttributeCenterX
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:_uiv_topView
+                                                          attribute:NSLayoutAttributeCenterX
+                                                         multiplier:1.0
+                                                           constant:0.0]];
+    
+    // Y constraint, 0.0
+    [_uiv_topView addConstraint:[NSLayoutConstraint constraintWithItem:_uil_numLabel
+                                                          attribute:NSLayoutAttributeTop
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:_uiv_topView
+                                                          attribute:NSLayoutAttributeTop
+                                                         multiplier:1.0
+                                                           constant:0.0]];
+    
+    
     
     _uib_back = [UIButton buttonWithType:UIButtonTypeCustom];
     _uib_back.frame = CGRectMake(0.0, 0.0, labelWidth, kTopViewHeight);
@@ -151,14 +236,52 @@ static float        kBottomViewHeight   = 45.0;
     [_uib_back addTarget:self action:@selector(tapBackButton:) forControlEvents:UIControlEventTouchUpInside];
     
     _uib_thumbView = [UIButton buttonWithType:UIButtonTypeCustom];
-    _uib_thumbView.frame = CGRectMake(view_width - labelWidth, 0.0, labelWidth, kTopViewHeight);
+    _uib_thumbView.frame = CGRectMake(self.view.frame.size.width - labelWidth, 0.0, labelWidth, kTopViewHeight);
     _uib_thumbView.backgroundColor = [UIColor clearColor];
     [_uib_thumbView setTitle:@"SEE ALL" forState:UIControlStateNormal];
     [_uib_thumbView setTitleColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0] forState:UIControlStateNormal];
     [_uib_thumbView setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     [_uib_thumbView.titleLabel setFont:[UIFont boldSystemFontOfSize:fontSize]];
     [_uib_thumbView addTarget:self action:@selector(loadThumbsView:) forControlEvents:UIControlEventTouchUpInside];
+    _uib_thumbView.translatesAutoresizingMaskIntoConstraints = NO;
     [_uiv_topView addSubview: _uib_thumbView];
+    
+    // Width constraint, 100
+    [_uib_thumbView addConstraint:[NSLayoutConstraint constraintWithItem:_uib_thumbView
+                                                              attribute:NSLayoutAttributeWidth
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:nil
+                                                              attribute:NSLayoutAttributeWidth
+                                                             multiplier:1.0
+                                                               constant:labelWidth]];
+    
+    // Height constraint, kTopViewHeight
+    [_uib_thumbView addConstraint:[NSLayoutConstraint constraintWithItem:_uib_thumbView
+                                                              attribute:NSLayoutAttributeHeight
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:nil
+                                                              attribute:NSLayoutAttributeHeight
+                                                             multiplier:1.0
+                                                               constant:kTopViewHeight]];
+    
+    // X constraint, 0.0
+    [_uiv_topView addConstraint:[NSLayoutConstraint constraintWithItem:_uib_thumbView
+                                                             attribute:NSLayoutAttributeTrailing
+                                                             relatedBy:NSLayoutRelationEqual
+                                                                toItem:_uiv_topView
+                                                             attribute:NSLayoutAttributeTrailing
+                                                            multiplier:1.0
+                                                              constant:0.0]];
+    
+    // Y constraint, 0.0
+    [_uiv_topView addConstraint:[NSLayoutConstraint constraintWithItem:_uib_thumbView
+                                                             attribute:NSLayoutAttributeTop
+                                                             relatedBy:NSLayoutRelationEqual
+                                                                toItem:_uiv_topView
+                                                             attribute:NSLayoutAttributeTop
+                                                            multiplier:1.0
+                                                              constant:0.0]];
+    
 }
 
 //----------------------------------------------------
@@ -300,9 +423,52 @@ static float        kBottomViewHeight   = 45.0;
 //----------------------------------------------------
 -(void)createBottomView
 {
-    _uiv_bottomView = [[UIView alloc] initWithFrame:CGRectMake(0.0, view_height - kBottomViewHeight, view_width, kBottomViewHeight)];
+    _uiv_bottomView = [[UIView alloc] initWithFrame:CGRectMake(0.0, view_height - kBottomViewHeight, self.view.frame.size.width, kBottomViewHeight)];
     _uiv_bottomView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
+    _uiv_bottomView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     [self.view addSubview: _uiv_bottomView];
+    
+//    // Width constraint, self.vew width
+//    [_uiv_bottomView addConstraint:[NSLayoutConstraint constraintWithItem:_uiv_bottomView
+//                                                             attribute:NSLayoutAttributeWidth
+//                                                             relatedBy:NSLayoutRelationEqual
+//                                                                toItem:nil
+//                                                             attribute:NSLayoutAttributeWidth
+//                                                            multiplier:1.0
+//                                                              constant:self.view.frame.size.width]];
+    
+    // Height constraint, kTopViewHeight
+    [_uiv_bottomView addConstraint:[NSLayoutConstraint constraintWithItem:_uiv_bottomView
+                                                             attribute:NSLayoutAttributeHeight
+                                                             relatedBy:NSLayoutRelationEqual
+                                                                toItem:nil
+                                                             attribute:NSLayoutAttributeHeight
+                                                            multiplier:1.0
+                                                              constant:kBottomViewHeight]];
+    
+    // X constraint, 0.0
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_uiv_bottomView
+                                                          attribute:NSLayoutAttributeLeft
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeLeft
+                                                         multiplier:1.0
+                                                           constant:0.0]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_uiv_bottomView
+                                                          attribute:NSLayoutAttributeRight                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeRight
+                                                         multiplier:1.0
+                                                           constant:0.0]];
+    // Y constraint, 0.0
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_uiv_bottomView
+                                                          attribute:NSLayoutAttributeTop
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeTop
+                                                         multiplier:1.0
+                                                           constant:self.view.frame.size.height-kBottomViewHeight]];
+    
     
     _uil_caption = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 0.0, 200.0, kBottomViewHeight)];
     _uil_caption.backgroundColor = [UIColor clearColor];
@@ -335,7 +501,7 @@ static float        kBottomViewHeight   = 45.0;
     self.pageViewController.dataSource = self.modelController;
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.view.autoresizesSubviews =YES;
-    self.pageViewController.view.frame = CGRectMake(0.0, 0.0, view_width, view_height);//self.view.bounds;
+    self.pageViewController.view.frame = self.view.frame;//CGRectMake(0.0, 0.0, view_width, view_height);//self.view.bounds;
     [self.pageViewController didMoveToParentViewController:self];
     [self addChildViewController:self.pageViewController];
     [self.view addSubview: self.pageViewController.view];
